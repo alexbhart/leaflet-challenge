@@ -37,6 +37,26 @@ function createMap(earthquakes) {
     L.control.layers(baseMaps, overlayMaps, {
         collapsed: false
     }).addTo(map);
+
+    // Create a legend to display information about our map.
+    var info = L.control({
+        position: "bottomright"
+    });
+
+    // When the layer control is added, insert a div with the class of "legend".
+    info.onAdd = function () {
+        var div = L.DomUtil.create("div", "legend");
+        var legendInfo = "<h3>Depth of Earthquake<br /></h3>" +
+            "<div class=\"labels\">" +
+            "<div class=\"min\">" + "test" + "</div>" +
+            "<div class=\"max\">" + "second-test" + "</div>" +
+            "</div>";
+
+        div.innerHTML = legendInfo;
+        return div;
+    };
+    // Add the info legend to the map.
+    info.addTo(map);
 }
 
 // Write function to handle dynamic coloring of earthquake data

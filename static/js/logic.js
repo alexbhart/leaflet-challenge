@@ -46,12 +46,13 @@ function createMap(earthquakes) {
     // When the layer control is added, insert a div with the class of "legend".
     info.onAdd = function () {
         var div = L.DomUtil.create("div", "legend");
-        var legendInfo = "<h3>Depth of Earthquake<br /></h3>" +
-            "<div class=\"labels\">" +
-            "<div class=\"min\">" + "test" + "</div>" +
-            "<div class=\"max\">" + "second-test" + "</div>" +
-            "</div>";
-
+        var legendInfo = ["<h3>Depth of Earthquake</h3>",
+        "<p class='shallow' style = background-color: lightgreen> < 10 </p>",
+        "<p class='deep' style = background-color: green> 10 - 30</p>",
+        "<p class='deeper'style = background-color: cadetblue>30- 50 </p>",
+        "<p class='evendeeper'style = background-color: lightred> 50 - 70 </p>",
+        "<p class='wowthatsdeep'style = background-color: red> 70-90</p>",
+        "<p class='deepest'style = background-color: darkred> 90+ </p>"]
         div.innerHTML = legendInfo;
         return div;
     };
@@ -59,6 +60,7 @@ function createMap(earthquakes) {
     info.addTo(map);
 }
 
+colorList = ["lightgreen","green","cadetblue","lightred","red","darkred"]
 // Write function to handle dynamic coloring of earthquake data
 function depthColor(deep) {
     if (deep < 10) {

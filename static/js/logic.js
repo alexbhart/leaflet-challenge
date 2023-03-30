@@ -9,6 +9,7 @@ function createMap(earthquakes) {
     var topo = L.tileLayer('https://{s}.tile.opentopomap.org/{z}/{x}/{y}.png', {
         attribution: 'Map data: &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors, <a href="http://viewfinderpanoramas.org">SRTM</a> | Map style: &copy; <a href="https://opentopomap.org">OpenTopoMap</a> (<a href="https://creativecommons.org/licenses/by-sa/3.0/">CC-BY-SA</a>)'
     });
+    var stamen = L.tileLayer("https://stamen-tiles.a.ssl.fastly.net/terrain/{z}/{x}/{y}.jpg")
     // var stamenwc = L.tileLayer.provider('Stamen.Watercolor' {
     // attribution: 'Map tiles by <a href="http://stamen.com">Stamen Design</a>, under <a href="http://creativecommons.org/licenses/by/3.0">CC BY 3.0</a>. Data by <a href="http://openstreetmap.org">OpenStreetMap</a>, under <a href="http://creativecommons.org/licenses/by-sa/3.0">CC BY SA</a>.'
     // });
@@ -17,7 +18,8 @@ function createMap(earthquakes) {
     // Create a baseMaps object to hold the streetmap & topomap layer.
     var baseMaps = {
         "Street Map": streetmap,
-        "Topography": topo
+        "Topography": topo,
+        "Terrain": stamen
     };
 
     // Create an overlayMaps object to hold the earthquakes layer.
@@ -30,7 +32,7 @@ function createMap(earthquakes) {
         //   center: [34.42, -119.69], // santa barbara coordinates
         center: [25, 0],
         zoom: 2,
-        layers: [streetmap, earthquakes]
+        layers: [stamen, earthquakes]
     });
 
     // Create a layer control, and pass it baseMaps and overlayMaps. Add the layer control to the map.
@@ -39,23 +41,58 @@ function createMap(earthquakes) {
     }).addTo(map);
 
     // Create a legend to display information about our map.
-    var info = L.control({
-        position: "bottomright"
-    });
+    // var info = L.control({
+    //     position: "bottomleft"
+    // });
 
-    // When the layer control is added, insert a div with the class of "legend".
-    info.onAdd = function () {
-        var div = L.DomUtil.create("div", "legend");
-        var legendInfo = ["<h3>Depth of Earthquake</h3>",
-        "<p class='shallow' style = background-color: lightgreen> < 10 </p>",
-        "<p class='deep' style = background-color: green> 10 - 30</p>",
-        "<p class='deeper'style = background-color: cadetblue>30- 50 </p>",
-        "<p class='evendeeper'style = background-color: lightred> 50 - 70 </p>",
-        "<p class='wowthatsdeep'style = background-color: red> 70-90</p>",
-        "<p class='deepest'style = background-color: darkred> 90+ </p>"]
-        div.innerHTML = legendInfo;
-        return div;
-    };
+    // // When the layer control is added, insert a div with the class of "legend".
+    // info.onAdd = function () {
+    //     var div = L.DomUtil.create("div", "legend");
+    //     // var legendInfo = ["<h3>Depth of Earthquake</h3>",
+    //     // "<p class='shallow' style = 'background-color: lightgreen;'> < 10 </p>",
+    //     // "<p class='deep' style = background-color: green> 10 - 30</p>",
+    //     // "<p class='deeper'style = background-color: cadetblue>30- 50 </p>",
+    //     // "<p class='evendeeper'style = background-color: lightred> 50 - 70 </p>",
+    //     // "<p class='wowthatsdeep'style = background-color: red> 70-90</p>",
+    //     // "<p class='deepest'style = background-color: darkred> 90+ </p>"]
+
+    //     // div.innerHTML = legendInfo
+    //     // return div;
+    //     div.innerHTML += "<h4>Depth of Earthquake</h4>";
+    //     div.innerHTML += '<i style="background: #477AC2"></i><span> < 10</span><br>';
+    //     div.innerHTML += '<i style="background: green"></i><span>Forest</span><br>';
+    //     div.innerHTML += '<i style="background: cadetblue"></i><span>Land</span><br>';
+    //     div.innerHTML += '<i style="background: lightred"></i><span>Residential</span><br>';
+    //     div.innerHTML += '<i style="background: red></i><span>Ice</span><br>';
+    //     div.innerHTML += '<i style="background: darkred></i><span>Ice</span><br>';
+              
+        
+      
+    //     return div;
+      
+    // };
+
+    var legend = L.control({ position: "bottomleft" });
+
+legend.onAdd = function(map) {
+  var div = L.DomUtil.create("div", "legend");
+  div.innerHTML += "<h4>Earthquake Depth</h4>";
+  div.innerHTML += '<i style="background: lightgreen"></i><span> < 10 </span><br>';
+  div.innerHTML += '<i style="background: green"></i><span>10 - 30</span><br>';
+  div.innerHTML += '<i style="background: cadetblue"></i><span>30 -50 </span><br>';
+  div.innerHTML += '<i style="background: pink"></i><span>50 - 70</span><br>';
+  div.innerHTML += '<i style="background: red"></i><span>70 - 90</span><br>';
+  div.innerHTML += '<i style="background: darkred"></i><span>90+</span><br>';
+
+  
+  
+
+  return div;
+};
+
+legend.addTo(map);
+
+    
     // Add the info legend to the map.
     info.addTo(map);
 }
@@ -73,7 +110,7 @@ function depthColor(deep) {
         return "cadetblue"
     }
     else if (deep < 70) {
-        return "lightred"
+        return "pink"
     }
     else if (deep < 90) {
         return "red"
